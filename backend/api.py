@@ -7,7 +7,7 @@ import numpy as np
 app = Flask(__name__)
 
 # Load the saved model
-model = load_model("shape_detection_model.h5")
+model = load_model("backend/shape_detection_model.h5")
 
 # Label mapping
 label_mapping = {0: "circle", 1: "square", 2: "triangle"}
