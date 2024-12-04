@@ -12,6 +12,10 @@ model = load_model("backend/shape_detection_model.h5")
 # Label mapping
 label_mapping = {0: "circle", 1: "square", 2: "triangle"}
 
+@app.route("/")
+def index():
+    return jsonify({"message": "Shape Detection API is running!"})
+
 # API endpoint for prediction
 @app.route("/predict", methods=["POST"])
 def predict():
