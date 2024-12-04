@@ -6,7 +6,8 @@ from flask_cors import CORS
 
 # Initialize Flask app
 app = Flask(__name__)
-CORS(app)
+
+CORS(app, origins=["https://dallasgiles.github.io"])
 
 # Load the saved model
 model = load_model("backend/shape_detection_model.h5")
