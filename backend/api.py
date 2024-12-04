@@ -2,9 +2,11 @@ from flask import Flask, request, jsonify
 from tensorflow.keras.models import load_model
 import cv2
 import numpy as np
+from flask_cors import CORS
 
 # Initialize Flask app
 app = Flask(__name__)
+CORS(app, origins=["https://ddallasgiles.github.io"])
 
 # Load the saved model
 model = load_model("backend/shape_detection_model.h5")
