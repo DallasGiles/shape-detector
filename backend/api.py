@@ -7,6 +7,7 @@ from flask_cors import CORS
 # Initialize Flask app
 app = Flask(__name__)
 
+# Allow only requests from the specific origin
 CORS(app, origins=["https://dallasgiles.github.io"])
 
 # Load the saved model
