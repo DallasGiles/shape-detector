@@ -1,29 +1,23 @@
 from flask import Flask, request, jsonify
-from tensorflow.keras.models import load_model
+from flask_cors import CORS
 import cv2
 import numpy as np
-from flask_cors import CORS
+from tensorflow.keras.models import load_model
 
-# Initialize Flask app
 app = Flask(__name__)
+CORS(app)  # Allow all origins for debugging
 
-# Allow only requests from the specific origin
-CORS(app, origins=["https://dallasgiles.github.io"])
-
-# Load the saved model
 model = load_model("backend/shape_detection_model.h5")
 
-# Label mapping
 label_mapping = {0: "circle", 1: "square", 2: "triangle"}
 
 @app.route("/")
 def index():
     return jsonify({"message": "Shape Detection API is running!"})
 
-# API endpoint for prediction
 @app.route("/predict", methods=["POST"])
 def predict():
-    # Log the request files
+    # Just to ensure we see what's received
     print("Request files:", request.files)
 
     if "image" not in request.files:
@@ -32,21 +26,17 @@ def predict():
     file = request.files["image"]
     print("Received file:", file.filename)
 
-    # Read the image
     image = cv2.imdecode(np.frombuffer(file.read(), np.uint8), cv2.IMREAD_COLOR)
     if image is None:
         return jsonify({"error": "Invalid image file"}), 400
 
-    # Preprocess the image
     image = cv2.resize(image, (128, 128)) / 255.0
     image = np.expand_dims(image, axis=0)
 
-    # Make a prediction
     prediction = np.argmax(model.predict(image), axis=1)[0]
     label = label_mapping[prediction]
 
     return jsonify({"label": label})
 
-# Run the app
 if __name__ == "__main__":
     app.run(debug=True)
